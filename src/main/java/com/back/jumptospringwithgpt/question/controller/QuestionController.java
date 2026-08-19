@@ -5,6 +5,7 @@ import com.back.jumptospringwithgpt.question.dto.QuestionModifyRequest;
 import com.back.jumptospringwithgpt.question.dto.QuestionResponse;
 import com.back.jumptospringwithgpt.question.entity.Question;
 import com.back.jumptospringwithgpt.question.service.QuestionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,8 @@ public class QuestionController {
 
     // 질문 생성
     @PostMapping
-    public ResponseEntity<QuestionResponse> createQuestion(@RequestBody QuestionCreateRequest request) {
+    public ResponseEntity<QuestionResponse> createQuestion
+    (@Valid @RequestBody QuestionCreateRequest request) {
         Question question = questionService.create(request.subject(), request.content());
         QuestionResponse response = QuestionResponse.from(question);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -47,8 +49,8 @@ public class QuestionController {
 
     // 질문 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<QuestionResponse> modifyQuestion(@PathVariable Integer id,
-                                                           @RequestBody QuestionModifyRequest request) {
+    public ResponseEntity<QuestionResponse> modifyQuestion
+    (@PathVariable Integer id, @Valid @RequestBody QuestionModifyRequest request) {
         QuestionResponse response = QuestionResponse.from(questionService.modify(id, request.subject(), request.content()));
         return ResponseEntity.ok(response);
     }

@@ -1,5 +1,14 @@
 package com.back.jumptospringwithgpt.question.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 //record는 게터 필요 없이 데이터를 담는 용도
-public record QuestionCreateRequest(String subject, String content) {
-}
+public record QuestionCreateRequest(
+        @NotBlank(message = "제목은 필수입니다.")
+        @Size(max = 200, message = "제목은 200자 이하로 입력해주세요.")
+        String subject,
+
+        @NotBlank(message = "내용은 필수입니다.")
+        String content
+) {}

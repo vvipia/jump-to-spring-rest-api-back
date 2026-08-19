@@ -1,5 +1,6 @@
 package com.back.jumptospringwithgpt.question.service;
 
+import com.back.jumptospringwithgpt.global.DataNotFoundException;
 import com.back.jumptospringwithgpt.question.entity.Question;
 import com.back.jumptospringwithgpt.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class QuestionService {
             return question.get();
         }
         else {
-            throw new RuntimeException(); // 추후 오류 처리 고치기
+            throw new DataNotFoundException("질문을 찾을 수 없습니다.");
         }
     }
 

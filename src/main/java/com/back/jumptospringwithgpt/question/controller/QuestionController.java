@@ -1,5 +1,7 @@
 package com.back.jumptospringwithgpt.question.controller;
 
+import com.back.jumptospringwithgpt.question.dto.QuestionCreateRequest;
+import com.back.jumptospringwithgpt.question.dto.QuestionModifyRequest;
 import com.back.jumptospringwithgpt.question.dto.QuestionResponse;
 import com.back.jumptospringwithgpt.question.entity.Question;
 import com.back.jumptospringwithgpt.question.service.QuestionService;
@@ -16,28 +18,32 @@ public class QuestionController {
     private final QuestionService questionService;
 
     // 전체 질문 반환
-    @GetMapping()
-    public List<Question> questions() {
-        return this.questionService.getQuestionList();
+    @GetMapping
+    public List<QuestionResponse> questions() {
+        return questionService.getQuestionList()
+                .stream()
+                .map(QuestionResponse::from) //Question객체를 하나씩 QuestionResponse로 변환
+                .toList();
     }
 
     // 특정 질문 반환
     @GetMapping("/{id}")
-    public Question detail(@PathVariable Integer id) {
-        return questionService.getQuestion(id);
+    public QuestionResponse detail(@PathVariable Integer id) {
+        return QuestionResponse.from(questionService.getQuestion(id));
     }
 
     // 질문 생성
     @PostMapping
-    public Question createQuestion(@RequestBody Question question) {
-        return questionService.create(question.getSubject(), question.getContent());
+    public QuestionResponse createQuestion(@RequestBody QuestionCreateRequest request) {
+        Question question = questionService.create(request.subject(), request.content());
+        return QuestionResponse.from(question);
     }
 
     // 질문 수정
     @PatchMapping("/{id}")
-    public Question modifyQuestion(@PathVariable Integer id,
-                                   @RequestBody Question question) {
-        return questionService.modify(id, question.getSubject(), question.getContent());
+    public QuestionResponse modifyQuestion(@PathVariable Integer id,
+                                   @RequestBody QuestionModifyRequest request) {
+        return QuestionResponse.from(questionService.modify(id, request.subject(), request.content()));
     }
 
     // 질문 삭제

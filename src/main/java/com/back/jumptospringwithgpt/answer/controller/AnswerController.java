@@ -34,7 +34,7 @@ public class AnswerController {
         Answer answer = answerService.create(questionId, request.content());
         return ResponseEntity.status(HttpStatus.CREATED).body(AnswerResponse.from(answer));
     }
-    // 답변 수정
+    // 답변 수정a
     @PatchMapping("/api/v1/answers/{answerId}")
     public ResponseEntity<AnswerResponse> modifyAnswer(@PathVariable Integer answerId,
                                                        @RequestBody AnswerModifyRequest request) {

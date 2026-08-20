@@ -1,20 +1,17 @@
-package com.back.jumptospringwithgpt.question.entity;
+package com.back.jumptospringwithgpt.answer.entity;
 
+import com.back.jumptospringwithgpt.question.entity.Question;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @Entity
-public class Question { //DB용 객체
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(length = 200)
-    private String subject;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -23,17 +20,20 @@ public class Question { //DB용 객체
 
     private LocalDateTime modifyDate;
 
-    protected Question() {}
+    @ManyToOne
+    private Question question;
 
-    public Question(String subject, String content) {
-        this.subject = subject;
+    protected Answer() {}
+
+    public Answer(Question question, String content) {
+        this.question = question;
         this.content = content;
         this.createDate = LocalDateTime.now();
     }
 
-    public void modify(String subject, String content) {
-        this.subject = subject;
+    public void modify(String content) {
         this.content = content;
         this.modifyDate = LocalDateTime.now();
     }
+
 }

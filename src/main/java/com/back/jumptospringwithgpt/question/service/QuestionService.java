@@ -14,6 +14,7 @@ import java.util.zip.DataFormatException;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
@@ -36,13 +37,7 @@ public class QuestionService {
     // 질문 등록
     @Transactional
     public Question create(String subject, String content) {
-
-        Question question = new Question();
-
-        question.setSubject(subject);
-        question.setContent(content);
-        question.setCreateDate(LocalDateTime.now());
-
+        Question question = new Question(subject, content);
         return questionRepository.save(question);
     }
 
@@ -50,10 +45,7 @@ public class QuestionService {
     @Transactional // 여기에 save가 없는 이유 -> JPA가 값 수정을 감지 후 더티 체킹으로 업데이트 발생
     public Question modify(Integer id, String subject, String content) {
         Question question = getQuestion(id);
-
-        question.setSubject(subject);
-        question.setContent(content);
-
+        question.modify(subject, content);
         return question;
     }
 
